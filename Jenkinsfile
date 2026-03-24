@@ -1,46 +1,37 @@
 pipeline {
-    agent {
-        docker { 
-            image 'python:3.10'
-            args '-u root' 
-        }
-    }
+    agent none // On définit l'agent par étape
 
     environment {
         DOCKER_IMAGE = "product-app:latest"
-        SONAR_SCANNER_HOME = tool 'SonarScanner' // Nom à vérifier dans Administrer Jenkins > Global Tool Configuration
     }
 
     stages {
-        stage('Installation') {
+        stage('Installation & Tests') {
+            agent {
+                docker { 
+                    image 'python:3.10'
+                    args '-u root' 
+                }
+            }
             steps {
                 sh 'pip install -r requirements.txt'
-            }
-        }
-
-        stage('Tests & Couverture') {
-            steps {
                 sh 'pip install pytest-cov'
+                // On génère coverage.xml pour SonarQube
                 sh 'pytest --cov=backend --cov-report=xml:coverage.xml --cov-report=term-missing backend/tests/'
-            }
-        }
-
-        stage('Analyse Complexité (Radon)') {
-            steps {
                 sh 'radon cc backend -a'
             }
         }
 
         stage('SonarQube Analysis') {
+            agent any // On repasse sur l'agent Jenkins (qui a Java)
             steps {
                 script {
                     def scannerHome = tool 'SonarScanner'
-                    withSonarQubeEnv('SonarQube') { // 'SonarQube' est le nom configuré dans Jenkins
+                    withSonarQubeEnv('SonarQube') {
                         sh "${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=product-api \
                             -Dsonar.sources=backend \
-                            -Dsonar.python.coverage.reportPaths=coverage.xml \
-                            -Dsonar.host.url=${SONAR_HOST_URL}"
+                            -Dsonar.python.coverage.reportPaths=coverage.xml"
                     }
                 }
             }
