@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "nom": "Ordinateur Portable",
+        "description": "PC Ultra-puissant pour le développement",
+        "prix": 1499.99,
+        "quantite": 15
+    },
+    {
+        "id": 2,
+        "nom": "Clavier Mécanique",
+        "description": "Switchs bleus avec rétroéclairage RGB",
+        "prix": 89.50,
+        "quantite": 45
+    },
+    {
+        "id": 3,
+        "nom": "Écran 27 pouces",
+        "description": "4K UHD, 144Hz, dalle IPS",
+        "prix": 349.99,
+        "quantite": 10
+    },
+    {
+        "id": 4,
+        "nom": "Souris Ergonomique",
+        "description": "Sans fil, capteur haute précision",
+        "prix": 45.00,
+        "quantite": 3
+    },
+    {
+        "id": 5,
+        "nom": "Casque Audio",
+        "description": "Réduction de bruit active, Bluetooth 5.0",
+        "prix": 199.00,
+        "quantite": 25
+    }
+]
