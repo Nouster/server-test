@@ -23,9 +23,12 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
+                    // Test de connectivité
+                    echo "Vérification de la connexion à SonarQube..."
+                    sh "curl -s -I http://sonarqube:9000/api/system/status || echo 'SonarQube non joignable'"
+                    
                     def scannerHome = tool 'SonarScanner'
                     withSonarQubeEnv('SonarQube') {
-                        // On laisse le scanner lire sonar-project.properties
                         sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
