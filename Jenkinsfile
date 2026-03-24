@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "product-app:latest"
+        SONAR_SCANNER_HOME = tool 'SonarScanner' // Nom à vérifier dans Administrer Jenkins > Global Tool Configuration
     }
 
     stages {
@@ -19,7 +20,8 @@ pipeline {
 
         stage('Tests & Couverture') {
             steps {
-                sh 'pytest --cov=backend --cov-report=xml --cov-report=term-missing backend/tests/'
+                sh 'pip install pytest-cov'
+                sh 'pytest --cov=backend --cov-report=xml:coverage.xml --cov-report=term-missing backend/tests/'
             }
         }
 
@@ -29,8 +31,23 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('SonarQube') { // 'SonarQube' est le nom configuré dans Jenkins
+                        sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=product-api \
+                            -Dsonar.sources=backend \
+                            -Dsonar.python.coverage.reportPaths=coverage.xml \
+                            -Dsonar.host.url=${SONAR_HOST_URL}"
+                    }
+                }
+            }
+        }
+
         stage('Docker Build') {
-            agent any // On repasse sur l'agent principal pour construire l'image finale
+            agent any
             steps {
                 sh "docker build -t ${DOCKER_IMAGE} ."
             }

@@ -2,6 +2,7 @@ fastapi
 uvicorn
 pydantic
 pytest
+pytest-cov
 httpx
 coverage
 radon

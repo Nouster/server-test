@@ -1,63 +1,92 @@
-# Gestion de Produits API
+# Gestion de Produits - Boutique en Ligne (Projet DevOps)
 
-Application de gestion de produits avec Backend FastAPI et Frontend moderne (Tailwind CSS).
+Ce projet est une application complète de gestion de produits (CRUD) conçue pour répondre aux exigences d'un pipeline d'intégration et de déploiement continu (CI/CD) moderne.
 
-## Fonctionnalités
+## 📋 Contexte du Projet
 
-- CRUD complet (Créer, Lire, Mettre à jour, Supprimer)
-- Données initiales chargées via JSON
-- Interface Dashboard moderne et responsive
-- Suite de tests unitaires avec 100% de couverture
-- Conteneurisation avec Docker
+Développement d'un backend en Python (FastAPI) pour une boutique en ligne, incluant une interface frontend moderne, une suite de tests automatisés, et une infrastructure DevOps (Jenkins & SonarQube).
 
-## Installation Locale
+## 🚀 Fonctionnalités
 
-1. Installez les dépendances :
+- **Backend CRUD** : Gestion des produits (id, nom, description, prix, quantité).
+- **Frontend Dashboard** : Interface interactive avec Tailwind CSS.
+- **Données Initiales** : Chargement automatique via `backend/products.json`.
+- **Infrastructure** : Dockerisation complète et orchestration via Docker Compose.
+- **CI/CD** : Pipeline Jenkins automatisé avec analyse de qualité SonarQube.
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 📁 Structure du Projet
 
-2. Lancez le serveur :
+- `backend/` : Code source de l'API FastAPI et modèles.
+- `frontend/` : Interface utilisateur (HTML/JS/Tailwind).
+- `backend/tests/` : Suite de tests unitaires (Pytest).
+- `Dockerfile` : Configuration de l'image de production.
+- `docker-compose.yml` : Orchestration Jenkins, SonarQube et Postgres.
+- `Jenkinsfile` : Script de pipeline CI/CD.
 
-   ```bash
-   uvicorn backend.main:app --reload
-   ```
+## 🛠️ Installation et Utilisation
 
-3. Accédez à l'application :
-   - Frontend : `http://localhost:8000`
-   - Documentation API : `http://localhost:8000/docs`
+### 1. Installation Locale (Développement)
 
-## Docker
+```bash
+# Installation des dépendances
+pip install -r requirements.txt
 
-1. Construisez l'image :
+# Lancement du serveur (API + Frontend)
+uvicorn backend.main:app --reload
+```
 
-   ```bash
-   docker build -t product-app .
-   ```
+Accès : `http://localhost:8000`
 
-2. Lancez le conteneur :
+### 2. Utilisation avec Docker
 
-   ```bash
-   docker run -p 8000:8000 product-app
-   ```
+```bash
+# Construction et lancement de l'application
+docker build -t product-app .
+docker run -p 8000:8000 product-app
+```
 
-## Tests et Qualité
+### 3. Environnement DevOps (Jenkins & SonarQube)
 
-- Exécutez les tests :
+```bash
+# Lancement de toute l'infrastructure
+docker-compose up -d
+```
 
-  ```bash
-  pytest
-  ```
+- **Jenkins** : `http://localhost:8081`
+- **SonarQube** : `http://localhost:9000`
 
-- Vérifiez la couverture :
+## 🧪 Qualité du Code et Tests
 
-  ```bash
-  pytest --cov=backend backend/tests/
-  ```
+### Tests Unitaires (Couverture > 80%)
 
-- Analyse de complexité (Radon) :
+```bash
+# Exécuter les tests avec rapport de couverture
+pytest --cov=backend backend/tests/
+```
 
-  ```bash
-  radon cc backend -a
-  ```
+### Analyse de Complexité (Radon)
+
+```bash
+# Vérifier la complexité cyclomatique
+radon cc backend -a
+```
+
+## 📖 Documentation de l'API CRUD
+
+| Méthode    | Endpoint         | Description                       |
+| :--------- | :--------------- | :-------------------------------- |
+| **GET**    | `/products`      | Liste tous les produits           |
+| **GET**    | `/products/{id}` | Détails d'un produit spécifique   |
+| **POST**   | `/products`      | Créer un nouveau produit          |
+| **PUT**    | `/products/{id}` | Mettre à jour un produit existant |
+| **DELETE** | `/products/{id}` | Supprimer un produit              |
+
+## ⚙️ Pipeline CI/CD (Jenkins)
+
+Le pipeline automatisé (`Jenkinsfile`) exécute les étapes suivantes :
+
+1. **Installation** : Préparation de l'environnement Python.
+2. **Tests & Couverture** : Validation du code et génération du rapport XML.
+3. **Analyse Radon** : Contrôle de la complexité du code.
+4. **Analyse SonarQube** : Envoi des métriques vers le serveur de qualité.
+5. **Docker Build** : Création de l'image finale en cas de succès.
